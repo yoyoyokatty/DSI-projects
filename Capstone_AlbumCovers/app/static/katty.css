@@ -1,0 +1,58 @@
+body {
+    background-color: #FFFFFF;
+}
+
+
+* {
+  margin: 2;
+  font-family: arial;
+}
+
+nav {
+  width: 100%;
+  background: #161918;
+  padding: 0.5em;
+}
+
+nav h1 {
+    font: 21pt "arial";
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 0px; 
+    margin: 1;
+}
+
+nav * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+.column-left{ float: left; width: 33%; }
+.column-right{ float: right; width: 33%; }
+.column-center{ display: inline-block; width: 33%; }
+
+p {font: 11pt arial;
+    color: #000000;
+    line-height: 120%;
+    
+}
+
+b {font: 11pt "arial";
+    font-weight: bold;
+    color: #333333;
+}
+
+a {font: 11pt arial;
+    color: #7B68EE;
+}
+
+blockquote {font: 11pt arial;
+    font-style: italic;
+    color: 	#a6a6a6;
+}
+
+li {font: 11pt arial;
+    color: #333333;
+    
+}

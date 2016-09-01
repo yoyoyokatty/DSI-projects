@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Album Cover Decade/Genre Predictor</title>
+    <link rel="stylesheet" href="/static/katty.css">
+    <link class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
+  <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js">
+  </script>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    var file = input.files[0];
+    var form = new FormData();
+    form.append('user_upload', file);
+    $.ajax({
+      'url' : '/result',
+      'method' : 'POST',
+      'data': form,
+      'contentType': false,
+      'processData': false})
+      .success(function(response){
+        var pre2000 = response["decade"]["1980 to 2000"];
+        var post2000 = response["decade"]["2000 to Present"];
+        var alternative = response["genre"]["Alternative"];
+        var blues = response["genre"]["Blues"];  
+        var country = response["genre"]["Country"];
+        var dance = response["genre"]["Dance"];
+        var electronic = response["genre"]["Electronic"];
+        var hiphop = response["genre"]["HipHop"];  
+        var jazz = response["genre"]["Jazz"];
+        var pop = response["genre"]["Pop"];
+        var rb = response["genre"]["RB Soul"];
+        var reggae = response["genre"]["Reggae"];  
+        var rock = response["genre"]["Rock"];
+        var singer = response["genre"]["Singer/Songwriter"];
+        var world = response["genre"]["World"];
+
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawDecadeChart);
+        google.charts.setOnLoadCallback(drawGenreChart);
+        
+        function drawDecadeChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Decade", "Probability"],
+          ["1980 to 2000", pre2000],
+          ["2000 to Present", post2000],
+          ]);
+
+        var options = {
+            width: 300,
+            height: 300,
+            bar: {groupWidth: "65%"},
+            legend: { position: "none" },
+            vAxis: {textStyle: {color: "Black"}},
+            };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values_decade"));
+            chart.draw(data, options);}
+
+        function drawGenreChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Genre", "Probability"],
+          ["Alternative", alternative],
+          ["Blues", blues],
+          ["Country",  country],
+          ["Dance",  dance],
+          ["Electronic",  electronic],
+          ["Hip Hop",  hiphop],
+          ["Jazz",  jazz],
+          ["Pop",  pop],
+          ["RB & Soul",  rb],
+          ["Reggae",  reggae],
+          ["Rock", rock],
+          ["Singer/Songwriter",  singer],
+          ["World", world]
+        ]);
+
+        var options = {
+          width: 300,
+          height: 300,
+          bar: {groupWidth: "65%"},
+          legend: { position: "none" },
+          vAxis: {textStyle: {color: "Black"}},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values_genre"));
+        chart.draw(data, options);
+    }
+        
+
+        console.log(response)})
+
+    };
+    </script>
+
+    <script type="text/javascript">
+    
+    
+
+  function drawGenreChart() {
+      var data = google.visualization.arrayToDataTable([
+        ["Genre", "Probability"],
+        ["Alternative", alternative],
+        ["Blues", blues],
+        ["Country",  country],
+        ["Dance",  dance],
+        ["Electronic",  electronic],
+        ["Hip Hop",  hiphop],
+        ["Jazz",  jazz],
+        ["Pop",  pop],
+        ["RB & Soul",  rb],
+        ["Reggae",  reggae],
+        ["Rock", rock],
+        ["Singer/Songwriter",  singer],
+        ["World", world]
+      ]);
+
+      var options = {
+        width: 300,
+        height: 300,
+        bar: {groupWidth: "65%"},
+        legend: { position: "none" },
+        vAxis: {textStyle: {color: "Black"}},
+      };
+      var chart = new google.visualization.BarChart(document.getElementById("barchart_values_genre"));
+      chart.draw(data, options);
+  }
+  </script>
+  
+
+
+
+
+  </head>
+   <body>
+   <nav>
+    <h1> Album Cover Decade/Genre Predictor</h1>
+   </nav>
+   <p> Sourcing from Wikipedia and the iTunes API, I built a model using Support Vector Machines to predict the genre and the decade of any album cover from the 1980s to the present year. 
+   <br> This model will output probabilities for the following:
+   <li> <i> Decades</i>: 1980s to 2000, or 2000 to present Day
+   <li> <i> Genres </i>: Alternative, Blues, Country, Dance, Electronic, Hip Hop, Jazz, Pop, R&B / Soul, Reggae, Rock, Singer/Songwriter, and World
+
+<br>
+<br>
+<br>
+<br>
+
+<div class = "container">
+     <div class = "column-left">    
+      <b>Upload Your Album Cover</b>:
+      <br>
+      <form action = "." method = "POST">
+          <input type='file' id = "user_upload" name = "user_upload" onchange="readURL(this);" />
+          <br>
+          <br>
+        <img id="blah" src="#" alt="Upload Your Image" /></form>
+
+    </div>
+
+     <div class = "column-center">    
+     <b>Predicted Probability of Genre<b>
+    <div id="barchart_values_genre" ></div>
+
+     </div>
+
+     <div class = "column-right">  
+     <b>Predicted Probability of Decade</b>
+     <div id="barchart_values_decade"></div>
+     </div>
+
+</div>
+
+   </body>
+</html>
